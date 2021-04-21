@@ -27,7 +27,8 @@ public class ExpEmployeeSerializer implements Serializer<ExpEmployee> {
         if(Objects.isNull(employee)){
             return null;
         }
-        byte[] employeeCode , employeeName;
+        byte[] employeeCode ;
+        byte[] employeeName;
         try{
             if(StringUtils.isNotEmpty(employee.getEmployeeCode())){
                 employeeCode = employee.getEmployeeCode().getBytes(StandardCharsets.UTF_8);
