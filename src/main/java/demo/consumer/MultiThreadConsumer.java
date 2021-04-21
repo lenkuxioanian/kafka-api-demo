@@ -1,37 +1,31 @@
 package demo.consumer;
 
-import demo.consumer.deserializer.ExpEmployeeDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
- * 自定义反序列化消费者
+ * 多线程消费者
  *
  * @author Administrator
  * @version 1.0
  * @date 2021/4/16 23:56
  **/
-public class EmployeeDeserializerConsumer {
+public class MultiThreadConsumer {
 
     public static void main(String[] args) {
 
         Properties props = getProperties();
 
-        KafkaConsumer<String,String> consumer = new KafkaConsumer<>(props);
-
-        consumer.subscribe(Arrays.asList("first","second"));
-
-        while (true){
-            ConsumerRecords<String, String> consumerRecord = consumer.poll(2000);
-            for(ConsumerRecord<String, String> record : consumerRecord){
-                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-            }
+        for(int i = 0; i< 3; i++){
+            new KafkaThreadConsumer(props, Arrays.asList("first", "second")).start();
         }
+
     }
 
     private static Properties getProperties() {
@@ -53,7 +47,33 @@ public class EmployeeDeserializerConsumer {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         //value 反序列化类
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                ExpEmployeeDeserializer.class.getName());
+                "org.apache.kafka.common.serialization.StringDeserializer");
         return props;
+    }
+
+    public static class KafkaThreadConsumer extends Thread{
+
+        private KafkaConsumer<String, String> consumer;
+
+        KafkaThreadConsumer(Properties props, List<String> topics){
+            this.consumer = new KafkaConsumer<>(props);
+            this.consumer.subscribe(topics);
+        }
+
+        @Override
+        public void run(){
+            try {
+                while (true) {
+                    ConsumerRecords<String, String> consumerRecord = consumer.poll(2000);
+                    for (ConsumerRecord<String, String> record : consumerRecord) {
+                        System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+                    }
+                }
+            }catch (Exception e){
+                e.getStackTrace();
+            }finally {
+                consumer.close();
+            }
+        }
     }
 }

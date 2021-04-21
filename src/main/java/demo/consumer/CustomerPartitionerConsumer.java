@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 /**
- * 指定分区消费
+ * 消费者按分区消费
  *
  * @author Administrator
  * @version 1.0

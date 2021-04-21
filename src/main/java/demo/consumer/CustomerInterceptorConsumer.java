@@ -1,6 +1,6 @@
 package demo.consumer;
 
-import demo.consumer.deserializer.ExpEmployeeDeserializer;
+import demo.consumer.interceptor.CustomerConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.Properties;
 
 /**
- * 自定义反序列化消费者
+ * 消费者
  *
  * @author Administrator
  * @version 1.0
  * @date 2021/4/16 23:56
  **/
-public class EmployeeDeserializerConsumer {
+public class CustomerInterceptorConsumer {
 
     public static void main(String[] args) {
 
@@ -31,6 +31,7 @@ public class EmployeeDeserializerConsumer {
             for(ConsumerRecord<String, String> record : consumerRecord){
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
             }
+            consumer.commitSync();
         }
     }
 
@@ -41,19 +42,21 @@ public class EmployeeDeserializerConsumer {
         //消费者组
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
         //开启自动提交offset
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         //自动提交offset间隔
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         //默认读取的offset
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
         //隔离级别
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_committed");
+        //自定义拦截器
+        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, CustomerConsumerInterceptor.class.getName());
         //key 反序列化类
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringDeserializer");
         //value 反序列化类
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                ExpEmployeeDeserializer.class.getName());
+                "org.apache.kafka.common.serialization.StringDeserializer");
         return props;
     }
 }

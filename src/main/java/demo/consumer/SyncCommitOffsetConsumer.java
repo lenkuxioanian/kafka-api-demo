@@ -1,22 +1,22 @@
 package demo.consumer;
 
-import demo.consumer.deserializer.ExpEmployeeDeserializer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 /**
- * 自定义反序列化消费者
+ * TODO
  *
  * @author Administrator
  * @version 1.0
  * @date 2021/4/16 23:56
  **/
-public class EmployeeDeserializerConsumer {
+public class SyncCommitOffsetConsumer {
 
     public static void main(String[] args) {
 
@@ -28,8 +28,14 @@ public class EmployeeDeserializerConsumer {
 
         while (true){
             ConsumerRecords<String, String> consumerRecord = consumer.poll(2000);
-            for(ConsumerRecord<String, String> record : consumerRecord){
-                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+            for(TopicPartition topicPartition : consumerRecord.partitions()){
+                List<ConsumerRecord<String,String>> recordList = consumerRecord.records(topicPartition);
+                for(ConsumerRecord<String, String> record : recordList){
+                    System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+                }
+                long lastOffset = recordList.get(recordList.size() - 1).offset();
+
+                consumer.commitSync(Collections.singletonMap(topicPartition,new OffsetAndMetadata(lastOffset + 1)));
             }
         }
     }
@@ -41,9 +47,7 @@ public class EmployeeDeserializerConsumer {
         //消费者组
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
         //开启自动提交offset
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        //自动提交offset间隔
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         //默认读取的offset
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
         //隔离级别
@@ -53,7 +57,7 @@ public class EmployeeDeserializerConsumer {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         //value 反序列化类
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                ExpEmployeeDeserializer.class.getName());
+                "org.apache.kafka.common.serialization.StringDeserializer");
         return props;
     }
 }

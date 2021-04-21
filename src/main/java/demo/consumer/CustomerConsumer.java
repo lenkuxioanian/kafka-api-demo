@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 /**
- * TODO
+ * 消费者
  *
  * @author Administrator
  * @version 1.0
