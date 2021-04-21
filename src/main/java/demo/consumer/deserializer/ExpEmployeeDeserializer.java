@@ -43,7 +43,7 @@ public class ExpEmployeeDeserializer implements Deserializer<ExpEmployee> {
 
         employeeNameLength = byteBuffer.getInt();
         byte[] employeeNameByte = new byte[employeeNameLength];
-        byteBuffer.get(employeeNameLength);
+        byteBuffer.get(employeeNameByte);
 
         try {
             employeeCode = new String(employeeCodeByte, StandardCharsets.UTF_8);

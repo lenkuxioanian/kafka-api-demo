@@ -22,7 +22,7 @@ public class MultiThreadConsumer {
 
         Properties props = getProperties();
 
-        for(int i = 0; i< 3; i++){
+        for(int i = 0; i< 2; i++){
             new KafkaThreadConsumer(props, Arrays.asList("first", "second")).start();
         }
 
@@ -33,7 +33,7 @@ public class MultiThreadConsumer {
         //kafka broker集群
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1:9092,kafka2:9092,kafka3:9092");
         //消费者组
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction-4");
         //开启自动提交offset
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         //自动提交offset间隔

@@ -24,7 +24,7 @@ public class EmployeeDeserializerConsumer {
 
         KafkaConsumer<String,String> consumer = new KafkaConsumer<>(props);
 
-        consumer.subscribe(Arrays.asList("first","second"));
+        consumer.subscribe(Arrays.asList("third"));
 
         while (true){
             ConsumerRecords<String, String> consumerRecord = consumer.poll(2000);
@@ -39,7 +39,7 @@ public class EmployeeDeserializerConsumer {
         //kafka broker集群
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1:9092,kafka2:9092,kafka3:9092");
         //消费者组
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-demo1");
         //开启自动提交offset
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         //自动提交offset间隔

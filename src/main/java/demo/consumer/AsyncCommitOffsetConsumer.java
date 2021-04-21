@@ -55,11 +55,11 @@ public class AsyncCommitOffsetConsumer {
         //kafka broker集群
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1:9092,kafka2:9092,kafka3:9092");
         //消费者组
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction-1");
         //开启自动提交offset
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         //默认读取的offset
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
         //隔离级别
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_committed");
         //key 反序列化类

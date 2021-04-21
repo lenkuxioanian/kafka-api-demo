@@ -37,9 +37,6 @@ public class RebalanceConsumer {
             }
         });
 
-
-
-
         while (true){
             ConsumerRecords<String, String> consumerRecord = consumer.poll(100);
             for (TopicPartition topicPartition : consumerRecord.partitions()) {
@@ -59,7 +56,7 @@ public class RebalanceConsumer {
         //kafka broker集群
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1:9092,kafka2:9092,kafka3:9092");
         //消费者组
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-transaction-2");
         //开启自动提交offset
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         //默认读取的offset

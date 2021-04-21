@@ -20,8 +20,8 @@ public class CustomerProducer {
 
         KafkaProducer<String,String> producer = new KafkaProducer<>(props);
 
-        for(int i = 0 ; i < 10 ; i++){
-            producer.send(new ProducerRecord<>("third", "hello world" + i));
+        for(int i = 0 ; i < 10000 ; i++){
+            producer.send(new ProducerRecord<>("second", "hello world" + i));
         }
 
         producer.close();

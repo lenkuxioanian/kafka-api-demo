@@ -22,7 +22,7 @@ public class CustomerPartitionerProducer {
 
         KafkaProducer<String,String> producer = new KafkaProducer<>(props);
 
-        producer.send(new ProducerRecord<>("second","second", "hello world"),(metadata, exception) -> {
+        producer.send(new ProducerRecord<>("first","second", "hello waaa"),(metadata, exception) -> {
            if(exception == null){
                System.out.println("success " + metadata.topic() + ' '+ metadata.partition()+ ' '+ metadata.offset());
            }else{

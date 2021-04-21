@@ -30,15 +30,21 @@ public class AppointOffsetConsumer {
         }
 
         for(TopicPartition topicPartition : topicPartitionSet){
+            //TODO 从数据库中获取当前topicPartition 的offset
             consumer.seek(topicPartition,10);
         }
 
         while (true){
             ConsumerRecords<String, String> consumerRecord = consumer.poll(2000);
-            for(ConsumerRecord<String, String> record : consumerRecord){
-                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+            for(TopicPartition tp : consumerRecord.partitions()){
+                List<ConsumerRecord<String,String>> recordList = consumerRecord.records(tp);
+                for(ConsumerRecord<String, String> record : recordList){
+                    System.out.printf("topic =%s,partition = %d, offset = %d, key = %s, value = %s%n",record.topic(),record.partition(), record.offset(), record.key(), record.value());
+                }
+                long lastOffset = recordList.get(recordList.size() - 1).offset();
+                //TODO 将对应分区的offset存储到数据库中
+
             }
-            consumer.commitSync();
         }
     }
 

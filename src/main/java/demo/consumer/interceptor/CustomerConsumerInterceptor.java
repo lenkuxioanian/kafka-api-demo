@@ -46,7 +46,7 @@ public class CustomerConsumerInterceptor implements ConsumerInterceptor<String, 
 
     @Override
     public void onCommit(Map<TopicPartition, OffsetAndMetadata> offsets) {
-        offsets.forEach((topicPartition, offsetAndMetadata) -> System.out.println(topicPartition +":"+ offsetAndMetadata.offset()));
+        //offsets.forEach((topicPartition, offsetAndMetadata) -> System.out.println(topicPartition +":"+ offsetAndMetadata.offset()));
     }
 
     @Override

@@ -41,7 +41,7 @@ public class ExpEmployeeSerializer implements Serializer<ExpEmployee> {
             }else{
                 employeeName = new byte[0];
             }
-            ByteBuffer buffer = ByteBuffer.allocate(4+4 + employeeCode.length + employeeName.length);
+            ByteBuffer buffer = ByteBuffer.allocate(4+4 + employeeCode.length  + employeeName.length);
             buffer.putInt(employeeCode.length);
             buffer.put(employeeCode);
             buffer.putInt(employeeName.length);
