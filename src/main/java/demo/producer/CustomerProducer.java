@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 /**
  * TODO
@@ -15,16 +16,14 @@ import java.util.Properties;
  **/
 public class CustomerProducer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Properties props = getProperties();
 
         KafkaProducer<String,String> producer = new KafkaProducer<>(props);
 
-        for(int i = 0 ; i < 10000 ; i++){
-            producer.send(new ProducerRecord<>("second", "hello world" + i));
+        for(int i = 0 ; i < 100000 ; i++){
+            producer.send(new ProducerRecord<>("second", "hello world" + i)).get();
         }
-
-        producer.close();
     }
 
     private static Properties getProperties() {

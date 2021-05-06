@@ -24,14 +24,14 @@ public class CallbackCustomerProducer {
 
         KafkaProducer<String,String> producer = new KafkaProducer<>(props);
 
-        for(int i = 0 ; i < 10 ; i++){
+        for(int i = 0 ; i < 100 ; i++){
             producer.send(new ProducerRecord<>("second", "hello world" + i),(metadata, exception) -> {
                if(exception == null){
                    System.out.println("success " + metadata.topic() + ' '+ metadata.partition()+ ' '+ metadata.offset());
                }else{
                    exception.printStackTrace();
                }
-            }).get();
+            });
         }
 
         producer.close();

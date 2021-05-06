@@ -23,15 +23,15 @@ public class TransactionProducer {
         producer.initTransactions();
         try {
             producer.beginTransaction();
-            producer.send(new ProducerRecord<>("first", 0, null, "hello world"),(metadata, exception) -> {
+            producer.send(new ProducerRecord<>("first", 0, null, "hello world+231123"),(metadata, exception) -> {
                 if(exception == null){
                     System.out.println("success " + metadata.topic() + ' '+ metadata.partition()+ ' '+ metadata.offset());
                 }else{
                     exception.printStackTrace();
                 }
             }).get();
-            producer.commitTransaction();
-            //producer.abortTransaction();
+            //producer.commitTransaction();
+            producer.abortTransaction();
         }catch (Exception e){
             producer.abortTransaction();
         }

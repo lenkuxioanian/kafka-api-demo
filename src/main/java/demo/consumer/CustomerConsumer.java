@@ -30,6 +30,7 @@ public class CustomerConsumer {
             for(ConsumerRecord<String, String> record : consumerRecord){
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
             }
+
         }
     }
 
@@ -46,7 +47,7 @@ public class CustomerConsumer {
         //默认读取的offset
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"latest");
         //隔离级别
-        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_committed");
+        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_uncommitted");
         //key 反序列化类
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringDeserializer");
